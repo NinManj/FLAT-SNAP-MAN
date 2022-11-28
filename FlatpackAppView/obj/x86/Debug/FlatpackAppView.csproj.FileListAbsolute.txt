@@ -1,6 +1,0 @@
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/bin/Debug/FlatpackAppView.exe
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/bin/Debug/FlatpackAppView.pdb
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/obj/x86/Debug/FlatpackAppView.csproj.AssemblyReference.cache
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/obj/x86/Debug/FlatpackAppView.csproj.CoreCompileInputs.cache
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/obj/x86/Debug/FlatpackAppView.exe
-/home/ninman/Projects/FlatpackAppView/FlatpackAppView/obj/x86/Debug/FlatpackAppView.pdb
