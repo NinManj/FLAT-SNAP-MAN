@@ -6,4 +6,4 @@ Then this little app is for you!
 
 Support of snap packages is coming soon!
 
-To run just click on RunIt.sh and click "Run" or "Execute"
+To run just click on <b>RunIt.sh</b> and click "Run" or "Execute"
