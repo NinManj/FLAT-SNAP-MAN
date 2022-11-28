@@ -5,3 +5,5 @@ Tired of package managers? Want simplicity and convinience while working with Fl
 Then this little app is for you!
 
 Support of snap packages is coming soon!
+
+To run just click on RunIt.sh and click "Run" or "Execute"
