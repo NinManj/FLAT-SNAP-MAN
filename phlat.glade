@@ -5,7 +5,7 @@
   <object class="GtkWindow" id="MainWindow">
     <property name="can-focus">False</property>
     <property name="resizable">False</property>
-    <signal name="destroy" handler="remove" swapped="no"/>
+    <signal name="destroy" handler="onDestroy" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -16,17 +16,19 @@
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="applist">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <signal name="button-release-event" handler="sel" swapped="no"/>
                     <signal name="cursor-changed" handler="sel" swapped="no"/>
                     <signal name="visibility-notify-event" handler="appear" swapped="no"/>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="selection"/>
+                      <object class="GtkTreeSelection"/>
                     </child>
                   </object>
                 </child>
@@ -57,7 +59,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="infoButton">
+                  <object class="GtkButton" id="updatebutton">
                     <property name="label" translatable="yes">Update</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -125,6 +127,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="baseline-position">top</property>
                 <child>
                   <object class="GtkImage" id="appimg">
                     <property name="visible">True</property>
@@ -153,7 +156,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -161,12 +164,27 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="editable">False</property>
-                <property name="wrap-mode">char</property>
+                <property name="wrap-mode">word-char</property>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">17</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="folderbutton">
+                <property name="label" translatable="yes">App Folder</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="dir" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">5</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
