@@ -6,6 +6,7 @@ Then this little app is for you!
 
 Support of snap packages is coming soon!
 
-![skrin](https://user-images.githubusercontent.com/119310712/204406686-ba4cf5f8-8aaa-4264-924e-55b67c20ef8a.png)
+![screen](https://user-images.githubusercontent.com/119310712/204406879-7cfbf095-8ec6-4bd8-93fb-5fe8db36225f.png)
+
 
 To run just click on <b>RunIt.sh</b> and click "Run" or "Execute"
