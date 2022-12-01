@@ -44,17 +44,16 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkButton" id="delButton">
-                    <property name="label" translatable="yes">Delete</property>
+                  <object class="GtkButton" id="folderbutton">
+                    <property name="label" translatable="yes">Folder</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <signal name="clicked" handler="delete" swapped="no"/>
+                    <signal name="clicked" handler="dir" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">2</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -141,10 +140,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="appname">
+                  <object class="GtkTextView" id="appname">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Choose a program</property>
+                    <property name="double-buffered">False</property>
+                    <property name="halign">baseline</property>
+                    <property name="hexpand">True</property>
+                    <property name="editable">False</property>
+                    <property name="wrap-mode">word-char</property>
+                    <property name="monospace">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -173,12 +177,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="folderbutton">
-                <property name="label" translatable="yes">App Folder</property>
+              <object class="GtkButton" id="delbutton">
+                <property name="label" translatable="yes">Delete</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="dir" swapped="no"/>
+                <signal name="clicked" handler="delete" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
