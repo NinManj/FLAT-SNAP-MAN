@@ -32,7 +32,7 @@ def imgupdate(todel,appimg):
 
 def message(inf,Handler,Text):
     inf.set_border_width(20)  # размер рамки окна
-    inf.set_decorated(0)
+    inf.set_resizable(0)
     label = Gtk.Label()
     label.set_markup(Text)
     label.set_justify(Gtk.Justification.CENTER)
