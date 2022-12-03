@@ -5,28 +5,59 @@ from gi.repository import Gtk
 from gi.repository.GdkPixbuf import Pixbuf
 import os
 
-def update(store):
+def update(store,mode):
     store.clear()
     buff = ''
+    lol = [[], [], [], [], [], []]
     i = 0
-    bashc = str(subprocess.check_output('flatpak list --columns=name,application', shell=True).decode())
-    for c in bashc:
-        buff += str(c)
-        if c == "\t":
-            iter = store.append([buff, 'b'])
-            buff = ''
-        if c == "\n":
-            buff = buff[:-1]
-            store[iter][1] = buff
-            buff = ''
+    if (mode=='applist'):
+        bashc = str(subprocess.check_output('flatpak list --columns=name,application', shell=True).decode())
+        for c in bashc:
+            buff += str(c)
+            if c == "\t":
+                iter = store.append([buff, 'b'])
+                buff = ''
+            if c == "\n":
+                buff = buff[:-1]
+                store[iter][1] = buff
+                buff = ''
+    if (mode=='snaplist'):
+        bashc = str(subprocess.check_output('snap list', shell=True).decode())
+        snap = ''
+        for c, n in zip(bashc, bashc[1:]):
+            if c == ' ' and n == ' ':
+                snap = snap
+            else:
+                snap = snap + str(c)
+        i = 0
+        snap = snap[snap.find('Notes'):len(snap)][6:]
+        for c in snap:
+            buff += str(c)
+            if c == " ":
+                lol[i].append(buff)
+                buff = ''
+                i = i + 1
+            if c == "\n":
+                lol[i].append(buff[:-1])
+                buff = ''
+                i = 0
+        for name,id in zip(lol[0],lol[1]):
+            store.append([name,id])
 
-def imgupdate(todel,appimg):
+def imgupdate(todel,appimg, mode):
     if len(todel) == 1:
-        if os.path.exists("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg"):
-            pixbuf = Pixbuf.new_from_file("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg")
-            appimg.set_from_pixbuf(pixbuf)
-        else:
-            appimg.set_from_pixbuf()
+        if mode=='applist':
+            if os.path.exists("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg"):
+                pixbuf = Pixbuf.new_from_file("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg")
+                appimg.set_from_pixbuf(pixbuf)
+            else:
+                appimg.set_from_pixbuf()
+        if mode=='snaplist':
+            if os.path.exists("/snap/"+todel[0][:-1]+"/current/meta/gui/icon.png"):
+                pixbuf = Pixbuf.new_from_file("/snap/"+todel[0][:-1]+"/current/meta/gui/icon.png")
+                appimg.set_from_pixbuf(pixbuf)
+            else:
+                appimg.set_from_pixbuf()
     else:
         appimg.set_from_pixbuf()
 
