@@ -3,6 +3,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository.GdkPixbuf import Pixbuf
+from gi.repository.GdkPixbuf import InterpType
 import os
 
 def update(store,mode):
@@ -45,21 +46,24 @@ def update(store,mode):
             store.append([name,id])
 
 def imgupdate(todel,appimg, mode):
+    icontheme = Gtk.IconTheme.get_default()
+    stock = icontheme.load_icon(Gtk.STOCK_ABOUT, 128, 0)
     if len(todel) == 1:
+        flatdir = "/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/" + todel[0] + ".svg"
+        snapdir = "/snap/" + todel[0][:-1] + "/current/meta/gui/icon.png"
+        modedir = ""
         if mode=='applist':
-            if os.path.exists("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg"):
-                pixbuf = Pixbuf.new_from_file("/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/"+todel[0]+".svg")
-                appimg.set_from_pixbuf(pixbuf)
-            else:
-                appimg.set_from_pixbuf()
-        if mode=='snaplist':
-            if os.path.exists("/snap/"+todel[0][:-1]+"/current/meta/gui/icon.png"):
-                pixbuf = Pixbuf.new_from_file("/snap/"+todel[0][:-1]+"/current/meta/gui/icon.png")
-                appimg.set_from_pixbuf(pixbuf)
-            else:
-                appimg.set_from_pixbuf()
+            modedir=flatdir
+        if mode == 'snaplist':
+            modedir=snapdir
+        if os.path.exists(modedir):
+            pixbuf = Pixbuf.new_from_file(modedir)
+        else:
+            pixbuf = stock
+        pixbuf = pixbuf.scale_simple(48, 48, InterpType.BILINEAR)
+        appimg.set_from_pixbuf(pixbuf)
     else:
-        appimg.set_from_pixbuf()
+        appimg.set_from_pixbuf(stock)
 
 def message(inf,Handler,Text):
     inf.set_border_width(20)  # размер рамки окна

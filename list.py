@@ -19,7 +19,7 @@ def form(appprop, applist, appname, todel, appimg, mode):
         i=i+1
     print(todel)
     if len(todel)==1:
-        namebuffer.set_text(model[treeiter][0])
+        namebuffer.set_text('Name: '+model[treeiter][0])
         func.imgupdate(todel, appimg, mode)
     else:
         if len(todel)!=0:
