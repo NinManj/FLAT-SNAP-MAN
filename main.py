@@ -1,3 +1,5 @@
+import subprocess
+
 import gi
 import os
 gi.require_version('Gtk', '3.0')
@@ -19,8 +21,7 @@ class Handler:
         inf.destroy()
     #Вызываемые процедуры====================================================================
     def appnameReset(self,*args): #(visibility-notify-event) Загрузка списка программ
-        namebuffer = appname.get_buffer()
-        namebuffer.set_text("Choose an app...")
+        appname.set_markup("Choose an app...")
         func.imgupdate(todel, appimg, mode)
     def infoWindow(self,btn):#(clicked для infobutton) Формирование окна с информацией
         msg="PHLÆTMan\nv.0.4_py\nconvinient tool to manage your Flatpaks\nand Snaps\nNinMan(c) - 2022"
@@ -59,12 +60,20 @@ class Handler:
                 snapdel=snapdel+str(app)
             os.system('pkexec snap remove ' + snapdel)
         updateMode()
+    def buttonLaunch(self,*args):
+        if len(todel)==1:
+            if mode == 'applist':
+                os.system('flatpak run ' + todel[0])
+            if mode == 'snaplist':
+                os.system('snap run ' + todel[0])
 
 def updateMode():
     if mode=='applist':
         func.update(store, mode)
     if mode=='snaplist':
         func.update(snapstore, mode)
+
+
 #Основная часть программы===========================================================
 #Подключаемся к Глайду==============================================================
 builder = Gtk.Builder()
@@ -77,8 +86,9 @@ applist=builder.get_object("applist")
 snaplist=builder.get_object("snaplist")
 appprop=builder.get_object("appprop")
 appimg=builder.get_object("appimg")
-appname=builder.get_object("appname")
+appname=builder.get_object("appnamelabel")
 delbutton=builder.get_object("delbutton")
+launchbutton=builder.get_object("launchbutton")
 headerbar = builder.get_object("headerbar")
 stack = builder.get_object("stack")
 mode = stack.get_visible_child_name()
@@ -95,8 +105,8 @@ delbutton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION) #К�
 
 
 #Настраиваем отображение контента в ListView=========================================
-store = Gtk.ListStore(str,str) #Инициализируем хранилище для списка флатпаков
-snapstore = Gtk.ListStore(str,str) #Инициализируем хранилище для списка снапов
+store = Gtk.ListStore(str,str,str,str,str) #Инициализируем хранилище для списка флатпаков
+snapstore = Gtk.ListStore(str,str,str,str,str,str) #Инициализируем хранилище для списка снапов
 renderer = Gtk.CellRendererText()#Задаём тип отображения колонок (общий для всех)
 column = Gtk.TreeViewColumn(title="Flatpak apps", cell_renderer=renderer, text=0)# Создаём колонку и задаём для неё рендерер
 snapcolumn = Gtk.TreeViewColumn(title="Snap apps", cell_renderer=renderer, text=0) #Тоже самое для снапов

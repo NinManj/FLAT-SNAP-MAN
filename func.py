@@ -9,19 +9,23 @@ import os
 def update(store,mode):
     store.clear()
     buff = ''
+    kek=[[], [], [], [], []]
     lol = [[], [], [], [], [], []]
-    i = 0
     if (mode=='applist'):
-        bashc = str(subprocess.check_output('flatpak list --columns=name,application', shell=True).decode())
+        bashc = str(subprocess.check_output('flatpak list --columns=name,application,version,branch,installation', shell=True).decode())
+        i = 0
         for c in bashc:
             buff += str(c)
             if c == "\t":
-                iter = store.append([buff, 'b'])
+                kek[i].append(buff[:-1])
                 buff = ''
+                i = i + 1
             if c == "\n":
-                buff = buff[:-1]
-                store[iter][1] = buff
+                kek[i].append(buff[:-1])
                 buff = ''
+                i=0
+        for name,id,ver,branch,inst in zip(kek[0],kek[1],kek[2],kek[3],kek[4]):
+            store.append([name,id,ver,branch,inst])
     if (mode=='snaplist'):
         bashc = str(subprocess.check_output('snap list', shell=True).decode())
         snap = ''
@@ -42,8 +46,8 @@ def update(store,mode):
                 lol[i].append(buff[:-1])
                 buff = ''
                 i = 0
-        for name,id in zip(lol[0],lol[1]):
-            store.append([name,id])
+        for name,ver,rev,track,publ,notes in zip(lol[0],lol[1],lol[2],lol[3],lol[4],lol[5]):
+            store.append([name,ver,rev,track,publ,notes])
 
 def imgupdate(todel,appimg, mode):
     icontheme = Gtk.IconTheme.get_default()
