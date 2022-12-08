@@ -1,5 +1,5 @@
 # FLAT-SNAP-MAN
-FLAT-SNAP-MAN convinient tool to manage your Flatpaks
+FLAT-SNAP-MAN convinient tool to manage your Flatpaks and Snaps
 
 Tired of package managers? Want simplicity and convinience while working with Flatpaks?
 Then this little app is for you!
