@@ -1,5 +1,4 @@
 import subprocess
-
 import gi
 import os
 gi.require_version('Gtk', '3.0')
@@ -7,14 +6,11 @@ from gi.repository import Gtk
 import func
 import list
 
-inf=Gtk.Window() #Окно с информацией
 todel=[] #Список для удаления пакетов
 
 #Класс который обрабатывает сигналы из Глайда====================================
 class Handler:
     #Хэндлеры для старта и финиша программы==================================================
-    def programStart(self,*args):
-        updateMode()
     def onDestroy(self,*args): # (clicked для exitbutton) Выход из программы
         Gtk.main_quit()
     def infoQuit(self,*args): #Закрытие окна информации (Костыль)
@@ -22,9 +18,10 @@ class Handler:
     #Вызываемые процедуры====================================================================
     def appnameReset(self,*args): #(visibility-notify-event) Загрузка списка программ
         appname.set_markup("Choose an app...")
+        appprop.get_buffer().set_text('')
         func.imgupdate(todel, appimg, mode)
     def infoWindow(self,btn):#(clicked для infobutton) Формирование окна с информацией
-        msg="PHLÆTMan\nv.0.4_py\nconvinient tool to manage your Flatpaks\nand Snaps\nNinMan(c) - 2022"
+        msg="PHLÆTMan\nv.0.4_py\nconvinient tool to manage your Flatpaks\nand Snaps\nNinMan(c) - 2022\n"
         func.message(inf,Handler,msg)
     # Хэндлеры программых событий=============================================================
     def onpageSwitch(self,*args):
@@ -51,21 +48,31 @@ class Handler:
             if (mode == 'snaplist'):
                 os.system('xdg-open /snap/' + todel[0][:-1] + '/current')
     def buttonDelete(deletion,*args):#(clicked для deletebutton) Удаление программ
+        appname.set_markup("Choose an app...")
         if mode == 'applist':
             for app in todel:
-                os.system('flatpak uninstall -y '+ app)
+                if (checkbox.get_active()==True):
+                    os.system('flatpak remove -y --delete-data '+ app)
+                else:
+                    os.system('flatpak uninstall -y '+ app)
         if mode == 'snaplist':
             snapdel=''
             for app in todel:
                 snapdel=snapdel+str(app)
-            os.system('pkexec snap remove ' + snapdel)
+            if (checkbox.get_active()==True):
+                command='pkexec snap remove --purge '+snapdel[:-1]
+            else:
+                command = 'pkexec snap remove ' + snapdel[:-1]
+            if os.system(command)>0:
+                func.message(inf, Handler, 'An error occured\nPlease check terminal output\n')
         updateMode()
+        func.imgupdate(todel, appimg, mode)
     def buttonLaunch(self,*args):
         if len(todel)==1:
             if mode == 'applist':
-                os.system('flatpak run ' + todel[0])
+                subprocess.Popen(['flatpak', 'run', todel[0]])
             if mode == 'snaplist':
-                os.system('snap run ' + todel[0])
+                subprocess.Popen(['snap','run', todel[0][:-1]])
 
 def updateMode():
     if mode=='applist':
@@ -91,14 +98,14 @@ delbutton=builder.get_object("delbutton")
 launchbutton=builder.get_object("launchbutton")
 headerbar = builder.get_object("headerbar")
 stack = builder.get_object("stack")
+checkbox = builder.get_object("datadeletecheck")
+inf=Gtk.Window() #Окно с информацией
 mode = stack.get_visible_child_name()
 
 
 #Задаём параметры для объектов========================================================
-appprop.set_size_request(200,300)
 window.set_border_width(10)
 window.set_default_size(250,500)
-applist.set_size_request(100,100)
 headerbar.set_show_close_button(True) #Символы закрыть/свернуть окно в хэдербаре
 window.set_titlebar(headerbar) #Установка хэдербара в качестае тайтлбара
 delbutton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION) #Красим кнопку удалить в красный
@@ -115,6 +122,8 @@ applist.set_model(store)  # Задаём модель для объекта (п�
 snaplist.append_column(snapcolumn)  # добавляем колонку в объект
 snaplist.set_model(snapstore)
 
+
 #Показываем ВСЁ========================================================================
 window.show_all()
+updateMode()
 Gtk.main()

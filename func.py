@@ -36,6 +36,7 @@ def update(store,mode):
                 snap = snap + str(c)
         i = 0
         snap = snap[snap.find('Notes'):len(snap)][6:]
+        snap=snap+"\n"
         for c in snap:
             buff += str(c)
             if c == " ":

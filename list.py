@@ -28,16 +28,14 @@ def form(appprop, applist, appname, todel, appimg, mode):
             if len(todel)==1:
                 if mode=="applist":
                     textbuffer.set_text(
-                        "Type: Flatpak" +
-                        "\nApp ID: " + model[treeiter][1] +
+                        "App ID: " + model[treeiter][1] +
                         "\nVersion: " + model[treeiter][2] +
                         "\nBranch: " + model[treeiter][3] +
                         "\nInstallation: " + model[treeiter][4]
                     )
                 if mode=="snaplist":
                     textbuffer.set_text(
-                        "Type: Snap" +
-                        "\nVersion: " + model[treeiter][1] +
+                        "Version: " + model[treeiter][1] +
                         "\nRevision: " + model[treeiter][2] +
                         "\nTracking: " + model[treeiter][3] +
                         "\nPublisher: " + model[treeiter][4] +
